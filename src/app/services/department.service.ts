@@ -13,7 +13,7 @@ export class DepartmentService {
 
   readonly url = 'http://localhost:3000/departments';
 
-  private subject$ = new BehaviorSubject<Department[]>(null);
+  private departmentSubject$: BehaviorSubject<Department[]> = new BehaviorSubject<Department[]>(null);
   private loaded = false;
 
   constructor(
@@ -27,12 +27,12 @@ export class DepartmentService {
         .pipe( 
           tap( (deps) => console.log(deps) ) 
         )
-        .subscribe(this.subject$);
+        .subscribe(this.departmentSubject$);
         
         this.loaded = true;
     }
 
-    return this.subject$.asObservable();
+    return this.departmentSubject$.asObservable();
 
   }
 
@@ -40,7 +40,7 @@ export class DepartmentService {
 
     return this.http.post<Department>(this.url, dep)
       .pipe( 
-        tap( dep =>  this.subject$.getValue().push(dep) ) 
+        tap( dep =>  this.departmentSubject$.getValue().push(dep) ) 
       );
 
   }
@@ -49,11 +49,10 @@ export class DepartmentService {
 
     return this.http.delete<Department>(`${this.url}/${dep._id}`)
       .pipe( tap( () => {
-        let deps = this.subject$.getValue();
+        let deps = this.departmentSubject$.getValue();
         let index = deps.findIndex( d => d._id === dep._id);
-        if(index >= 0) deps.splice(index, 1);
-
-
+        if(index >= 0) 
+          deps.splice(index, 1);
       }));
 
   }
@@ -64,9 +63,10 @@ export class DepartmentService {
       .pipe(
         tap( 
           (d) => {
-            let deps = this.subject$.getValue();
+            let deps = this.departmentSubject$.getValue();
             let index = deps.findIndex( d => d._id === dep._id);
-            deps[index] = d;
+            if(index>= 0)
+              deps[index].name = d.name;
           }
         )
       );

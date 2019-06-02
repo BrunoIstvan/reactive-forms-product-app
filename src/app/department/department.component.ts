@@ -46,10 +46,7 @@ export class DepartmentComponent implements OnInit {
 
       this.departmentoService.update({ name: this.depName, _id: this.depEdit._id })
         .subscribe(
-          (dep) => {
-            this.clearForm();
-            this.notify('Department updated!', 'Ok');
-          }, 
+          (dep) => this.notify('Department updated!', 'Ok'), 
           (err) => {
             console.error(err);
             this.notify(err.message, 'Error');
@@ -60,7 +57,6 @@ export class DepartmentComponent implements OnInit {
       this.departmentoService.add({ name: this.depName })
         .subscribe(
           (dep) => {
-            this.clearForm();
             this.notify('Department inserted!', 'Ok');
           }, 
           (err) => {
@@ -68,6 +64,8 @@ export class DepartmentComponent implements OnInit {
             this.notify(err.message, 'Error');
           });
     }
+
+    this.clearForm();
 
   }
 
@@ -92,7 +90,7 @@ export class DepartmentComponent implements OnInit {
     this.departmentoService.delete(dep)
     .subscribe(
       () => this.notify('Department deleted', 'OK'), 
-      (err) => this.notify(err.message, 'Error')
+      (err) => this.notify(err.error.msg, 'Error')
     );
 
   }

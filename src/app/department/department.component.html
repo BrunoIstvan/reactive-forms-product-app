@@ -10,9 +10,10 @@
 
       <mat-form-field>
 
-        <input matInput [(ngModel)]="depName" type="text" style="width: 100%;">
-        <mat-hint>The Department name</mat-hint>
-
+        <input matInput placeholder="Department name" [(ngModel)]="depName" 
+          (keyup.enter)="save()"
+          type="text" style="width: 100%;">
+      
       </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="end end">

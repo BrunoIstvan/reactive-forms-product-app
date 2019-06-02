@@ -22,7 +22,7 @@ import { DepartmentComponent } from './department/department.component';
     MaterialModule,
     FormsModule,
     CommonModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     HttpClientModule
   ],
   providers: [],
